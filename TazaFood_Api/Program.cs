@@ -6,6 +6,7 @@ using TazaFood.Core.Models;
 using TazaFood.Repository;
 using TazaFood.Repository.Context;
 using TazaFood.Repository.Repositories;
+using TazaFood_Api.Helpers;
 
 namespace TazaFood_Api
 {
@@ -32,6 +33,10 @@ namespace TazaFood_Api
             //builder.Services.AddScoped<IGenericRepository<Product>,GenericRepository<Product>>(); Per Model
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
 
+            // Allow DI For  Auto Mapper 
+            //builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
+            // Or
+            builder.Services.AddAutoMapper(typeof(MappingProfiles));
             #endregion
 
             var app = builder.Build();
@@ -59,7 +64,7 @@ namespace TazaFood_Api
             }
                 #endregion
 
-                #region Configure Kestrel Middlewares
+            #region Configure Kestrel Middlewares
                 // Configure the HTTP request pipeline.
                 if (app.Environment.IsDevelopment())
                 {
@@ -71,6 +76,7 @@ namespace TazaFood_Api
 
             app.UseAuthorization();
 
+            app.UseStaticFiles();
 
             app.MapControllers(); 
             #endregion

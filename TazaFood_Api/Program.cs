@@ -6,6 +6,7 @@ using TazaFood.Core.Models;
 using TazaFood.Repository;
 using TazaFood.Repository.Context;
 using TazaFood.Repository.Repositories;
+using TazaFood_Api.Extensions;
 using TazaFood_Api.Helpers;
 
 namespace TazaFood_Api
@@ -22,21 +23,15 @@ namespace TazaFood_Api
             builder.Services.AddControllers();  // allow Di For Api Services 
             //builder.Services.AddMvc();  allow Di For MVC And Api And Razor Pages 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-            builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+            builder.Services.UseSwaggerServices();
+
             builder.Services.AddDbContext<TazaDbContext>(Options =>
             {
                 Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            // Allow Di For GenericRepository 
-            //builder.Services.AddScoped<IGenericRepository<Product>,GenericRepository<Product>>(); Per Model
-            builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-
-            // Allow DI For  Auto Mapper 
-            //builder.Services.AddAutoMapper(M => M.AddProfile(new MappingProfiles()));
-            // Or
-            builder.Services.AddAutoMapper(typeof(MappingProfiles));
+            builder.Services.AddApplicationServices();
             #endregion
 
             var app = builder.Build();
@@ -68,8 +63,7 @@ namespace TazaFood_Api
                 // Configure the HTTP request pipeline.
                 if (app.Environment.IsDevelopment())
                 {
-                    app.UseSwagger();
-                    app.UseSwaggerUI();
+                app.UseSwaggerMiddlewares();
                 }
 
             app.UseHttpsRedirection();

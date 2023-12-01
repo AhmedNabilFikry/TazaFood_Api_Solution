@@ -20,7 +20,7 @@ namespace TazaFood.Repository.Repositories
         {
             _dbcontext = dbContext;
         }
-        public async Task<IEnumerable<T>> GetAllASync()
+        public async Task<IReadOnlyList<T>> GetAllASync()
         {
             //if (typeof(T) == typeof(Product))
             //    return (IEnumerable<T>)await _dbcontext.Products.Include(P => P.Category).ToListAsync();
@@ -33,7 +33,7 @@ namespace TazaFood.Repository.Repositories
             => await _dbcontext.Set<T>().FindAsync(ID);
 
 
-        public async Task<IEnumerable<T>> GetAllWithSpecASync(ISpecification<T> spec)
+        public async Task<IReadOnlyList<T>> GetAllWithSpecASync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).ToListAsync();
         }

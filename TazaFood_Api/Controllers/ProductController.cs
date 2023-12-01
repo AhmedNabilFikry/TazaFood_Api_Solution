@@ -20,15 +20,15 @@ namespace TazaFood_Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ProductToReturnDTO>>> GetProducts() 
+        [HttpGet("GetAllProducts")]
+        public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProducts() 
         {
             var Spec = new ProductWithCategorySpec();
             var Products = await _productRepo.GetAllWithSpecASync(Spec);
             //var Products = await _productRepo.GetAllASync();
             // Return the Result 
             //OkObjectResult result = new OkObjectResult(Products); 
-            return Ok(_mapper.Map<IEnumerable<Product>,IEnumerable<ProductToReturnDTO>>(Products));
+            return Ok(_mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(Products));
         }
         [HttpGet("{ID}")]
         public async Task<ActionResult<ProductToReturnDTO>> GetProductByID(int ID)
@@ -37,6 +37,32 @@ namespace TazaFood_Api.Controllers
             var Product = await _productRepo.GetByIDWithSpecAsync(Spec);
             //var Product = await _productRepo.GetByIDAsync(ID);
             return Ok(_mapper.Map<Product,ProductToReturnDTO>(Product));
+        }
+        //GetProductsOrderBy
+        [HttpGet("SortingProducts")]
+        public async Task<ActionResult<IEnumerable<ProductToReturnDTO>>> GetProducts(string Sort)
+        {
+            var Spec = new ProductWithCategorySpec(Sort);
+            var Products = await _productRepo.GetAllWithSpecASync(Spec);
+            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDTO>>(Products));
+        }
+
+        //Filter Products Based on Given Criteria           
+        [HttpGet("FilterProducts")]
+        public async Task<ActionResult<IEnumerable<ProductToReturnDTO>>> FilterProducts(int? Price, int? CategoryID, int? Rate)
+        {
+            var Spec = new ProductWithCategorySpec(Price, CategoryID , Rate);
+            var Products = await _productRepo.GetAllWithSpecASync(Spec);
+            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDTO>>(Products));
+        }
+
+        //GetPagedProducts
+        [HttpGet("ProductsPagination")]
+        public async Task<ActionResult<IEnumerable<ProductToReturnDTO>>> GetProductByPagination([FromQuery]ProductSpecParams SpecParams)
+        {
+            var Spec = new ProductWithCategorySpec(SpecParams);
+            var Products = await _productRepo.GetAllWithSpecASync(Spec);
+            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDTO>>(Products));
         }
     }
 }

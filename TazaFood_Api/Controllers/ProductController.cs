@@ -5,6 +5,7 @@ using TazaFood.Core.IRepository;
 using TazaFood.Core.Models;
 using TazaFood.Core.Specification;
 using TazaFood_Api.Dtos;
+using TazaFood_Api.Helpers;
 
 namespace TazaFood_Api.Controllers
 {
@@ -56,13 +57,16 @@ namespace TazaFood_Api.Controllers
             return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDTO>>(Products));
         }
 
-        //GetPagedProducts
+        //GetPagedProducts "Add Standard Response for GetAll EndPoint"
         [HttpGet("ProductsPagination")]
-        public async Task<ActionResult<IEnumerable<ProductToReturnDTO>>> GetProductByPagination([FromQuery]ProductSpecParams SpecParams)
+        public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetProductByPagination([FromQuery]ProductSpecParams SpecParams)
         {
             var Spec = new ProductWithCategorySpec(SpecParams);
             var Products = await _productRepo.GetAllWithSpecASync(Spec);
-            return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDTO>>(Products));
+            var data = _mapper.Map<IReadOnlyList<Product>, IReadOnlyList<ProductToReturnDTO>>(Products);
+            var countspec = new ProductWithFiltrationForPaginationSpecification(SpecParams) ;
+            var count = await _productRepo.GetCountwithSpecAsync(countspec);
+            return Ok(new Pagination<ProductToReturnDTO>(SpecParams.PageIndex,SpecParams.PageSize, data , count));
         }
     }
 }

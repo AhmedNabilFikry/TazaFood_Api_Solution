@@ -47,5 +47,10 @@ namespace TazaFood.Repository.Repositories
         {
             return SpecificationEvaluator<T>.GetQuery(_dbcontext.Set<T>(), Spec);
         }
+
+        public async Task<int> GetCountwithSpecAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
+        }
     }
 }

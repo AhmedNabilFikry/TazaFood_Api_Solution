@@ -20,6 +20,8 @@ namespace TazaFood_Api.Extensions
             // Or By Using a simple Syntax 
             services.AddAutoMapper(typeof(MappingProfiles));
 
+            // Allow Di For Basket Controller
+            services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 
             return services;
         }

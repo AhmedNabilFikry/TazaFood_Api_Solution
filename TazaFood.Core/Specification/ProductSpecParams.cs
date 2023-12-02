@@ -24,5 +24,16 @@ namespace TazaFood.Core.Specification
 
         public int PageIndex { get; set; } = 1;
 
+        //Searching For A product
+        private string? search;
+
+        public string? Search
+        {
+            get { return search; }
+            set { search = value.ToLower(); }
+        }
+
+
+
     }
 }

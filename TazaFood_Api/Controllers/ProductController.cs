@@ -59,7 +59,7 @@ namespace TazaFood_Api.Controllers
 
         //GetPagedProducts "Add Standard Response for GetAll EndPoint"
         [HttpGet("ProductsPagination")]
-        public async Task<ActionResult<Pagination<ProductToReturnDTO>>> GetProductByPagination([FromQuery]ProductSpecParams SpecParams)
+        public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProductByPagination([FromQuery]ProductSpecParams SpecParams)
         {
             var Spec = new ProductWithCategorySpec(SpecParams);
             var Products = await _productRepo.GetAllWithSpecASync(Spec);

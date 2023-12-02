@@ -13,7 +13,8 @@ namespace TazaFood.Core.Specification
              : base(P =>
                  (!specParams.Rate.HasValue || specParams.Rate == P.Rate) &&
                  (!specParams.Price.HasValue || specParams.Price == P.Price) &&
-                 (!specParams.CategoryID.HasValue || specParams.CategoryID == P.CategoryID)
+                 (!specParams.CategoryID.HasValue || specParams.CategoryID == P.CategoryID) &&
+                 (string.IsNullOrEmpty(specParams.Search) || P.Name.ToLower().Contains(specParams.Search))
                  )
         {
             

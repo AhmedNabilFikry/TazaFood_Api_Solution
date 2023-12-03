@@ -8,7 +8,14 @@ namespace TazaFood_Api.Extensions
     {
         public static IServiceCollection AddIdentityServices(this IServiceCollection services) 
         {
-            services.AddIdentity<AppUser, IdentityRole>().AddEntityFrameworkStores<AppIdentityDbContext>();
+            services.AddIdentity<AppUser, IdentityRole>( Options => {
+
+                Options.Password.RequiredLength = 8;
+                Options.Password.RequireNonAlphanumeric = true;
+                Options.Password.RequireUppercase = true;
+                Options.Password.RequireLowercase = true;
+            }    
+                ).AddEntityFrameworkStores<AppIdentityDbContext>();
 
             services.AddAuthentication();
             return services;

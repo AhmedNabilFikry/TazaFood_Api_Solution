@@ -12,53 +12,42 @@ namespace TazaFood.Repository.IdentityContext
     public class AppIdentityDbContextSeed
     {
         // User Seeding 
-        public static async Task SeedUserAsync(UserManager<AppUser> userManager, ILoggerFactory loggerFactory)
+        public static async Task SeedUserAsync(UserManager<AppUser> userManager)
         {
-            try
+            // Check First If There's No User in the Database
+            if (!userManager.Users.Any())
             {
-                // Check First If There's No User in the Database
-                if (!userManager.Users.Any())
+                var user = new AppUser()
                 {
-                    var user = new AppUser()
-                    {
-                        DisplayName = "Ahmed Nabil",
-                        Email = "Admin@gmail.com",
-                        UserName = "Ahmed.Nabil",
-                        PhoneNumber = "01024280793"
-                    };
-                    var result = await userManager.CreateAsync(user, "Admin-123");
+                    DisplayName = "Ahmed Nabil",
+                    Email = "Admin@gmail.com",
+                    UserName = "Ahmed.Nabil",
+                    PhoneNumber = "01024280793"
+                };
 
-                    if (result.Succeeded)
+                var result = await userManager.CreateAsync(user, "Admin-123");
+
+                if (result.Succeeded)
+                {
+                    // Log user information
+                    Console.WriteLine($"User seeded successfully:");
+                    Console.WriteLine($"User Id: {user.Id}");
+                    Console.WriteLine($"User Display Name: {user.DisplayName}");
+                    Console.WriteLine($"User Email: {user.Email}");
+                    Console.WriteLine($"User UserName: {user.UserName}");
+                    Console.WriteLine($"User Phone Number: {user.PhoneNumber}");
+                }
+                else
+                {
+                    // Log any errors that occurred during user creation
+                    Console.WriteLine("User seeding failed. Errors:");
+                    foreach (var error in result.Errors)
                     {
-                        // Log user information
-                        var logger = loggerFactory.CreateLogger("UserSeeder");
-                        logger.LogInformation("User seeded successfully:");
-                        logger.LogInformation($"User Id: {user.Id}");
-                        logger.LogInformation($"User Display Name: {user.DisplayName}");
-                        logger.LogInformation($"User Email: {user.Email}");
-                        logger.LogInformation($"User UserName: {user.UserName}");
-                        logger.LogInformation($"User Phone Number: {user.PhoneNumber}");
-                    }
-                    else
-                    {
-                        // Log errors
-                        var logger = loggerFactory.CreateLogger("UserSeeder");
-                        logger.LogError("User seeding failed. Errors:");
-                        foreach (var error in result.Errors)
-                        {
-                            logger.LogError(error.Description);
-                        }
+                        Console.WriteLine(error.Description);
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                // Log unexpected exceptions
-                var logger = loggerFactory.CreateLogger("UserSeeder");
-                logger.LogError($"An unexpected error occurred during user seeding: {ex.Message}");
-            }
         }
-
     }
 }
-}
+

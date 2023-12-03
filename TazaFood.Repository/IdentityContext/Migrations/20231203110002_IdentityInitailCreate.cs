@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace TazaFood.Repository.Identity.Migrations
+namespace TazaFood.Repository.IdentityContext.Migrations
 {
     /// <inheritdoc />
-    public partial class IdentityInitialCreate : Migration
+    public partial class IdentityInitailCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -76,21 +76,21 @@ namespace TazaFood.Repository.Identity.Migrations
                 name: "Address",
                 columns: table => new
                 {
-                    ID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Country = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    AppUserID = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Address", x => x.ID);
+                    table.PrimaryKey("PK_Address", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Address_AspNetUsers_AppUserID",
-                        column: x => x.AppUserID,
+                        name: "FK_Address_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -182,9 +182,9 @@ namespace TazaFood.Repository.Identity.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Address_AppUserID",
+                name: "IX_Address_AppUserId",
                 table: "Address",
-                column: "AppUserID",
+                column: "AppUserId",
                 unique: true);
 
             migrationBuilder.CreateIndex(

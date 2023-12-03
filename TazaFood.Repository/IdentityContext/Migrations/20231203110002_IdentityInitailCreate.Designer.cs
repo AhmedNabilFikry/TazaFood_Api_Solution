@@ -3,16 +3,20 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using TazaFood.Repository.Identity;
 
 #nullable disable
 
-namespace TazaFood.Repository.Identity.Migrations
+namespace TazaFood.Repository.IdentityContext.Migrations
 {
     [DbContext(typeof(AppIdentityDbContext))]
-    partial class AppIdentityDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231203110002_IdentityInitailCreate")]
+    partial class IdentityInitailCreate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,13 +160,13 @@ namespace TazaFood.Repository.Identity.Migrations
 
             modelBuilder.Entity("TazaFood.Core.Models.Identity.Address", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AppUserID")
+                    b.Property<string>("AppUserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
@@ -186,9 +190,9 @@ namespace TazaFood.Repository.Identity.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("AppUserID")
+                    b.HasIndex("AppUserId")
                         .IsUnique();
 
                     b.ToTable("Address");
@@ -318,7 +322,7 @@ namespace TazaFood.Repository.Identity.Migrations
                 {
                     b.HasOne("TazaFood.Core.Models.Identity.AppUser", "User")
                         .WithOne("Address")
-                        .HasForeignKey("TazaFood.Core.Models.Identity.Address", "AppUserID")
+                        .HasForeignKey("TazaFood.Core.Models.Identity.Address", "AppUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

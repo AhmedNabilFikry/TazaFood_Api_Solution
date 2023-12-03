@@ -1,12 +1,15 @@
 
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 using TazaFood.Core.IRepository;
 using TazaFood.Core.Models;
+using TazaFood.Core.Models.Identity;
 using TazaFood.Repository;
 using TazaFood.Repository.Context;
 using TazaFood.Repository.Identity;
+using TazaFood.Repository.IdentityContext;
 using TazaFood.Repository.Repositories;
 using TazaFood_Api.Extensions;
 using TazaFood_Api.Helpers;
@@ -26,30 +29,33 @@ namespace TazaFood_Api
             //builder.Services.AddMvc();  allow Di For MVC And Api And Razor Pages 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 
-            builder.Services.UseSwaggerServices();
-
-            // Allow DI For DataBase
+            //  Add SQL-DataBase Connection("Allow DI")
             builder.Services.AddDbContext<TazaDbContext>(
                 Options =>{
                     Options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
-            // Allow DI For IdentityDbContext
+            //  Add IdentityDbContext Connection("Allow DI")
             builder.Services.AddDbContext<AppIdentityDbContext>(
                 Options => {
                     Options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnection"));                
                 });
 
 
-            //Allow DI For Redis
+            // Add Redis Connection("Allow DI")
             builder.Services.AddSingleton<IConnectionMultiplexer>(
                 S => {
                     var Connection = builder.Configuration.GetConnectionString("RedisConnection");
                          return ConnectionMultiplexer.Connect(Connection);
                 });
 
-
+            // Add Application service
             builder.Services.AddApplicationServices();
+
+            builder.Services.UseSwaggerServices();
+
+            // Add Identity Service
+            builder.Services.AddIdentityServices();
 
             #endregion
 
@@ -72,6 +78,8 @@ namespace TazaFood_Api
 
                     var IdentityContext = Services.GetRequiredService<AppIdentityDbContext>();
                     await IdentityContext.Database.MigrateAsync(); // Apply Migration  "Update-IdentityDatabase"
+                    var userManager = Services.GetRequiredService<UserManager<AppUser>>();
+                    await AppIdentityDbContextSeed.SeedUserAsync(userManager); // seeding Initil Data To The Database 
                 }
                 catch (Exception Ex)
                 {

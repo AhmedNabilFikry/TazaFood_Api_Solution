@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TazaFood.Core.Models.Identity;
 using TazaFood.Core.Services;
 using TazaFood_Api.Dtos;
+using TazaFood_Api.Extensions;
 
 namespace TazaFood_Api.Controllers
 {
@@ -15,13 +19,16 @@ namespace TazaFood_Api.Controllers
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
         private readonly ITokenServices _tokenServices;
+        private readonly IMapper _mapper;
 
-        public AccountController(UserManager<AppUser> userManager , SignInManager<AppUser> signInManager , ILogger<AccountController> logger , ITokenServices tokenServices)
+        public AccountController(UserManager<AppUser> userManager , SignInManager<AppUser> signInManager ,
+            ILogger<AccountController> logger , ITokenServices tokenServices , IMapper mapper )
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _tokenServices = tokenServices;
+            _mapper = mapper;
         }
         [HttpPost("Login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
@@ -112,6 +119,29 @@ namespace TazaFood_Api.Controllers
                 _logger.LogError($"An unexpected error occurred during user registration: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }
+        }
+
+        [Authorize]
+        [HttpGet("GetCurrentUser")]
+        public async Task<ActionResult<UserDto>> GetCurrentUser()
+        {
+            var Email = User.FindFirstValue(ClaimTypes.Email);
+            var user = await _userManager.FindByEmailAsync(Email);
+            return Ok(new UserDto() 
+            { 
+                DisplayName = user.DisplayName,
+                Email = user.Email,
+                Token = await _tokenServices.CreateTokenAsync(user,_userManager)
+            });
+        }
+
+        [Authorize]
+        [HttpGet("GetUserAddress")]
+        public async Task<ActionResult<AddressDto>> GetUserAddress()
+        {
+            var user = await _userManager.FindUserWithAddressAsync(User);
+            var address =  _mapper.Map<Address, AddressDto>(user.Address);
+            return Ok(address);            
         }
     }
 }

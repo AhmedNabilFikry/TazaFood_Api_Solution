@@ -55,7 +55,7 @@ namespace TazaFood.Service.Token
                 authClaims.Add(new Claim(ClaimTypes.Role, role));
             }
              
-            // Add Secret Key     // Definig It In AppSettings
+            // Add Secret Key     // Defining It In AppSettings
             var authKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
           
             // Token Creation

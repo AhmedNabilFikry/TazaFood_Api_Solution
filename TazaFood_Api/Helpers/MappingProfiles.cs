@@ -13,7 +13,7 @@ namespace TazaFood_Api.Helpers
                 .ForMember(D => D.Category, O => O.MapFrom(S => S.Category.Name))
                 .ForMember(D => D.ImageUrl, O => O.MapFrom<ProductImageUrlResolver>());
 
-            CreateMap<Address, AddressDto>();
+            CreateMap<Address, AddressDto>().ReverseMap();
         }
     }
 }

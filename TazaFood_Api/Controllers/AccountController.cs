@@ -143,5 +143,18 @@ namespace TazaFood_Api.Controllers
             var address =  _mapper.Map<Address, AddressDto>(user.Address);
             return Ok(address);            
         }
+
+        [Authorize]
+        [HttpPut("UpdateUserAddress")]
+        public async Task<ActionResult<AddressDto>> UpdateUserAddress(AddressDto updatedAddress)
+        {
+            var address = _mapper.Map<AddressDto, Address>(updatedAddress);
+            var user = await _userManager.FindUserWithAddressAsync(User);
+            address.Id = user.Address.Id;
+            user.Address = address;
+            var result = await _userManager.UpdateAsync(user);
+            if (!result.Succeeded) return BadRequest("Something went Wrong While Updating the Address");
+            return Ok(updatedAddress);
+        }
     }
 }

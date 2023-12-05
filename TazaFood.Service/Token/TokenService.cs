@@ -56,14 +56,14 @@ namespace TazaFood.Service.Token
             }
              
             // Add Secret Key     // Definig It In AppSettings
-            var authKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Key));
+            var authKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
           
             // Token Creation
             var Token = new JwtSecurityToken(
                 
-                issuer: validIssuer,
-                audience: validAudience,
-                expires: DateTime.Now.AddDays(double.Parse(expireDate)),
+                issuer: _configuration["Jwt:ValidIssuer"],
+                audience: _configuration["Jwt:ValidAudience"],
+                expires: DateTime.Now.AddDays(double.Parse(_configuration["Jwt:ExpiresDays"])),
                 claims:authClaims,
                 signingCredentials:new SigningCredentials(authKey,SecurityAlgorithms.HmacSha256Signature)
                 

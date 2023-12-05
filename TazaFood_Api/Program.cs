@@ -55,7 +55,7 @@ namespace TazaFood_Api
             builder.Services.UseSwaggerServices();
 
             // Add Identity Service
-            builder.Services.AddIdentityServices();
+            builder.Services.AddIdentityServices(builder.Configuration);
 
             #endregion
 
@@ -96,11 +96,15 @@ namespace TazaFood_Api
                 app.UseSwaggerMiddlewares();
                 }
 
+            app.UseStatusCodePagesWithReExecute("/errors/{0}");    
+
             app.UseHttpsRedirection();
 
-            app.UseAuthorization();
-
             app.UseStaticFiles();
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
 
             app.MapControllers(); 
             #endregion

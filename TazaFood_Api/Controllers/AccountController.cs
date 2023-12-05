@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using TazaFood.Core.Models.Identity;
+using TazaFood.Core.Services;
 using TazaFood_Api.Dtos;
 
 namespace TazaFood_Api.Controllers
@@ -13,12 +14,14 @@ namespace TazaFood_Api.Controllers
         private readonly UserManager<AppUser> _userManager;
         private readonly SignInManager<AppUser> _signInManager;
         private readonly ILogger<AccountController> _logger;
+        private readonly ITokenServices _tokenServices;
 
-        public AccountController(UserManager<AppUser> userManager , SignInManager<AppUser> signInManager , ILogger<AccountController> logger)
+        public AccountController(UserManager<AppUser> userManager , SignInManager<AppUser> signInManager , ILogger<AccountController> logger , ITokenServices tokenServices)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
+            _tokenServices = tokenServices;
         }
         [HttpPost("Login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
@@ -46,7 +49,7 @@ namespace TazaFood_Api.Controllers
                     {
                         DisplayName = user.DisplayName,
                         Email = user.Email,
-                        Token = "This is the Token"
+                        Token = await _tokenServices.CreateTokenAsync(user,_userManager)
                     });
                 }
                 // Invalid data
@@ -97,7 +100,7 @@ namespace TazaFood_Api.Controllers
                     {
                         DisplayName = user.DisplayName,
                         Email = user.Email,
-                        Token = "This is the Token"
+                        Token = await _tokenServices.CreateTokenAsync(user,_userManager)
                     });
                 }
                 // Invalid data

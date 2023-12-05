@@ -1,6 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using TazaFood.Core.Models.Identity;
+using TazaFood.Core.Services;
 using TazaFood.Repository.Identity;
+using TazaFood.Service.Token;
 
 namespace TazaFood_Api.Extensions
 {
@@ -17,7 +20,10 @@ namespace TazaFood_Api.Extensions
             }    
                 ).AddEntityFrameworkStores<AppIdentityDbContext>();
 
-            services.AddAuthentication();
+            services.AddScoped<ITokenServices, TokenService>();
+            services.AddAuthentication(
+                JwtBearerDefaults.AuthenticationScheme
+                ).AddJwtBearer();
             return services;
         }
     }

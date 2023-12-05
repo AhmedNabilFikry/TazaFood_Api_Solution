@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TazaFood.Repository\TazaFood.Repository.csproj" />
+    <ProjectReference Include="..\TazaFood.Service\TazaFood.Service.csproj" />
   </ItemGroup>
 
 </Project>

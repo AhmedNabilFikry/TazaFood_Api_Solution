@@ -77,13 +77,12 @@ namespace TazaFood_Api.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    // Check if the user already exists
-                    var userExisted = await _userManager.FindByEmailAsync(registerDto.Email);
 
-                    if (userExisted is not null)
+                    // Check if the user already exists
+                    if (IsEmailExist(registerDto.Email).Result.Value)
                     {
                         // User with this email already exists
-                        return Ok("There is already an account with this email.");
+                        return BadRequest("There is already an account with this email.");
                     }
                     var user = new AppUser()
                     {
@@ -155,6 +154,12 @@ namespace TazaFood_Api.Controllers
             var result = await _userManager.UpdateAsync(user);
             if (!result.Succeeded) return BadRequest("Something went Wrong While Updating the Address");
             return Ok(updatedAddress);
+        }
+
+        [HttpGet("IsEmailExist")]
+        public async Task<ActionResult<bool>> IsEmailExist(string Email)
+        {
+            return await _userManager.FindByEmailAsync(Email) is not null;
         }
     }
 }

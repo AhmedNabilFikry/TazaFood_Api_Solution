@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using TazaFood.Core.Models;
+using TazaFood.Core.Models.Order_Aggregate;
 using TazaFood.Repository.Context;
 
 namespace TazaFood.Repository
@@ -38,6 +39,19 @@ namespace TazaFood.Repository
                     foreach (var product in Products)
                     {
                        await context.Set<Product>().AddAsync(product);
+                    }
+                    await context.SaveChangesAsync();
+                }
+            }
+            if (!context.Set<DeliveryMethod>().Any())
+            {
+                var DeliveryMethodsData = File.ReadAllText("../TazaFood.Repository/Context/Data Seeding/DeliveryMethods.json");
+                var deliveryMethods = JsonSerializer.Deserialize<List<DeliveryMethod>>(DeliveryMethodsData);
+                if (deliveryMethods is not null && deliveryMethods.Count() > 0)
+                {
+                    foreach (var deliveryMethod in deliveryMethods)
+                    {
+                        await context.Set<DeliveryMethod>().AddAsync(deliveryMethod);
                     }
                     await context.SaveChangesAsync();
                 }

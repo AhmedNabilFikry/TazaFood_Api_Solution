@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TazaFood.Core.Models;
+using TazaFood.Core.Models.Order_Aggregate;
 
 namespace TazaFood.Repository.Context
 {
@@ -27,5 +28,9 @@ namespace TazaFood.Repository.Context
         }
         public DbSet<Product> Products { get; set; }
         public DbSet<Category> Categories { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
+        public DbSet<DeliveryMethod> DeliveryMethods { get; set; }
+
     }
 }

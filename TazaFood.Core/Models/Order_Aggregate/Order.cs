@@ -9,6 +9,19 @@ namespace TazaFood.Core.Models.Order_Aggregate
 {
     public class Order : BaseModel
     {
+        public Order()
+        {
+            
+        }
+        public Order(string buyerEmail, Address shippingAddress, DeliveryMethod deliveryMethod, ICollection<OrderItem> orderItems, decimal subTotal)
+        {
+            BuyerEmail = buyerEmail;
+            ShippingAddress = shippingAddress;
+            DeliveryMethod = deliveryMethod;
+            this.orderItems = orderItems;
+            SubTotal = subTotal;
+        }
+
         public string BuyerEmail { get; set; }
         public DateTimeOffset OrderDate { get; set; } = DateTimeOffset.Now;
         public OrderStatus Status { get; set; } = OrderStatus.Pending;

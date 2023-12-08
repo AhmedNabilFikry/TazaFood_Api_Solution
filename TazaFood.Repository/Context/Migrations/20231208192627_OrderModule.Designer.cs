@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TazaFood.Repository.Context;
 
@@ -11,9 +12,11 @@ using TazaFood.Repository.Context;
 namespace TazaFood.Repository.Context.Migrations
 {
     [DbContext(typeof(TazaDbContext))]
-    partial class TazaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231208192627_OrderModule")]
+    partial class OrderModule
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -84,7 +87,7 @@ namespace TazaFood.Repository.Context.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("DeliveryMethodID")
-                        .HasColumnType("int?");
+                        .HasColumnType("int");
 
                     b.Property<DateTimeOffset>("OrderDate")
                         .HasColumnType("datetimeoffset");

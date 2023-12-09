@@ -23,6 +23,9 @@ namespace TazaFood_Api.Extensions
             // Allow Di For Basket Controller
             services.AddScoped(typeof(IBasketRepository), typeof(BasketRepository));
 
+            // Allow Di for IUnitOfWork
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+
             return services;
         }
     }

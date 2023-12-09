@@ -17,5 +17,8 @@ namespace TazaFood.Core.IRepository
         Task<IReadOnlyList<T>> GetAllWithSpecASync(ISpecification<T> spec);
         Task<T> GetByIDWithSpecAsync(ISpecification<T> spec);
         Task<int> GetCountwithSpecAsync(ISpecification<T> spec);
+        Task Add(T entity);
+        void Update(T entity);
+        void Delete(T entity);
     }
 }

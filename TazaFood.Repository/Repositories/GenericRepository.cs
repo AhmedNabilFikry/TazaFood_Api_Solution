@@ -52,5 +52,20 @@ namespace TazaFood.Repository.Repositories
         {
             return await ApplySpecification(spec).CountAsync();
         }
+
+        public async Task Add(T entity)
+        {
+            await _dbcontext.Set<T>().AddAsync(entity);
+        }
+
+        public void Update(T entity)
+        {
+            _dbcontext.Set<T>().Update(entity);
+        }
+
+        public void Delete(T entity)
+        {
+            _dbcontext.Set<T>().Remove(entity);
+        }
     }
 }

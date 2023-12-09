@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
 using System.Security.Claims;
@@ -7,7 +8,7 @@ using TazaFood.Core.Models;
 
 namespace TazaFood_Api.Controllers
 {
-
+    [Authorize]
     public class BasketController : BaseApiController
     {
         private readonly IBasketRepository _basketRepo;

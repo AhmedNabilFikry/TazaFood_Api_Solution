@@ -37,7 +37,8 @@ namespace TazaFood.Service.OrderService
             var orderItems = new List<OrderItem>();
 
             // If Basket is not Empty
-            if (basket?.items?.Count() > 0)             {
+            if (basket?.items?.Count() > 0)  
+            {
                 foreach (var item in basket.items)
                 {
                     var product = await _unitOfWork.Repository<Product>().GetByIDAsync(item.ID);
@@ -68,7 +69,7 @@ namespace TazaFood.Service.OrderService
             throw new NotImplementedException();
         }
 
-        public Task<Order> GetOrdersForUsersAsync(string BuyerEmail)
+        public Task<IReadOnlyList<Order>> GetOrdersForUsersAsync(string BuyerEmail)
         {
             throw new NotImplementedException();
         }

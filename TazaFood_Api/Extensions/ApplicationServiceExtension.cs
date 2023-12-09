@@ -1,5 +1,7 @@
 ﻿using TazaFood.Core.IRepository;
+using TazaFood.Core.Services;
 using TazaFood.Repository.Repositories;
+using TazaFood.Service.OrderService;
 using TazaFood_Api.Helpers;
 
 namespace TazaFood_Api.Extensions
@@ -25,6 +27,9 @@ namespace TazaFood_Api.Extensions
 
             // Allow Di for IUnitOfWork
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            // Allow Di For orderService
+            services.AddScoped(typeof(IOrderService), typeof(OrderService));
 
             return services;
         }

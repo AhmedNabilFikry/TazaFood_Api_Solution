@@ -7,6 +7,7 @@ using TazaFood.Core.IRepository;
 using TazaFood.Core.Models;
 using TazaFood.Core.Models.Order_Aggregate;
 using TazaFood.Core.Services;
+using TazaFood.Core.Specification.Order_Specifications;
 
 namespace TazaFood.Service.OrderService
 {
@@ -69,9 +70,11 @@ namespace TazaFood.Service.OrderService
             throw new NotImplementedException();
         }
 
-        public Task<IReadOnlyList<Order>> GetOrdersForUsersAsync(string BuyerEmail)
+        public async Task<IReadOnlyList<Order>> GetOrdersForUsersAsync(string BuyerEmail)
         {
-            throw new NotImplementedException();
+            var Spec = new OrderSpecifications(BuyerEmail);
+            var Orders = await _unitOfWork.Repository<Order>().GetAllWithSpecASync(Spec);
+            return Orders;
         }
     }
 }

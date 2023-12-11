@@ -18,7 +18,7 @@ namespace TazaFood.Core.Specification
         public int Take { get; set; }
         public bool IsPaginationEnabled { get ; set ; }
 
-        public BaseSpecification() {} // Include Condition 
+        public BaseSpecification() {} // Include Condition , Setting Criteria with null
         public BaseSpecification(Expression<Func<T, bool>> _criteria) // Where Condition 
         {
             Criteria = _criteria;

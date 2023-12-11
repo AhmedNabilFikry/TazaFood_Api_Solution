@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -8,6 +9,7 @@ using TazaFood_Api.Dtos;
 
 namespace TazaFood_Api.Controllers
 {
+    [Authorize]
     public class OrderController : BaseApiController
     {
         private readonly IOrderService _orderService;
@@ -29,5 +31,12 @@ namespace TazaFood_Api.Controllers
             return Ok(Order);
         }
 
+        [HttpGet("GetOrdersForUser")]
+        public async Task<ActionResult<IReadOnlyList<Order>>> GetOrdersForUser()
+        {
+            var BuyerEmail = User.FindFirstValue(ClaimTypes.Email);
+            var Orders = await _orderService.GetOrdersForUsersAsync(BuyerEmail);
+            return Ok(Orders);
+        }
     }
 }

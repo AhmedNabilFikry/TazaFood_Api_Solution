@@ -12,5 +12,6 @@ namespace TazaFood.Core.Services
         Task<Order?> CreateOrderAsync(string BuyerEmail , string BasketId , int DeliveryMethod , Address ShippingAddress);
         Task<IReadOnlyList<Order>> GetOrdersForUsersAsync(string BuyerEmail);
         Task<Order> GetOrderByIdForUserAsync(int OrderId, string BuyerEmail);
+        Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodAsync();
     }
 }

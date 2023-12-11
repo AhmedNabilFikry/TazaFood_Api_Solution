@@ -47,5 +47,12 @@ namespace TazaFood_Api.Controllers
             if (Order is null) return NotFound();
             return Ok(Order);
         }
+
+        [HttpGet("DeliveryMethod")]
+        public async Task<ActionResult<IReadOnlyList<DeliveryMethod>>> GetDeliveryMethod()
+        {
+            var DeliveryMethod = await _orderService.GetDeliveryMethodAsync();
+            return Ok(DeliveryMethod);
+        }
     }
 }

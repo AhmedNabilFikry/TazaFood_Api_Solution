@@ -78,5 +78,12 @@ namespace TazaFood.Service.OrderService
             var Orders = await _unitOfWork.Repository<Order>().GetAllWithSpecASync(Spec);
             return Orders;
         }
+
+        public async Task<IReadOnlyList<DeliveryMethod>> GetDeliveryMethodAsync()
+        {
+            var deliveryMethod = await _unitOfWork.Repository<DeliveryMethod>().GetAllASync();
+            return deliveryMethod;
+        }
+
     }
 }

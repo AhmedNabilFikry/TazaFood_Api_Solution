@@ -65,9 +65,11 @@ namespace TazaFood.Service.OrderService
             return order;
         }
 
-        public Task<Order> GetOrderByIdForUserAsync(int OrderId, string BuyerEmail)
+        public async Task<Order> GetOrderByIdForUserAsync(int OrderId, string BuyerEmail)
         {
-            throw new NotImplementedException();
+            var Spec = new OrderSpecifications(OrderId, BuyerEmail);
+            var Order = await _unitOfWork.Repository<Order>().GetByIDWithSpecAsync(Spec);
+            return Order;
         }
 
         public async Task<IReadOnlyList<Order>> GetOrdersForUsersAsync(string BuyerEmail)

@@ -16,5 +16,11 @@ namespace TazaFood.Core.Specification.Order_Specifications
             Includes.Add(O => O.orderItems);
             AddOrderByDesc(O => O.OrderDate);   
         }
+        public OrderSpecifications(int Id, string email)
+            :base(O => O.BuyerEmail == email && O.ID == Id)
+        {
+            Includes.Add(O => O.DeliveryMethod);
+            Includes.Add(O => O.orderItems);
+        }
     }
 }

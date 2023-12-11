@@ -15,7 +15,7 @@ namespace TazaFood_Api.Controllers
         private readonly IOrderService _orderService;
         private readonly IMapper _mapper;
 
-        public OrderController(IOrderService orderService , IMapper mapper)
+        public OrderController(IOrderService orderService, IMapper mapper)
         {
             _orderService = orderService;
             _mapper = mapper;
@@ -26,7 +26,7 @@ namespace TazaFood_Api.Controllers
         {
             var BuyerEmail = User.FindFirstValue(ClaimTypes.Email);
             var Address = _mapper.Map<AddressDto, Address>(orderDto.ShippingAddress);
-            var Order = await _orderService.CreateOrderAsync(BuyerEmail,orderDto.BaskektId,orderDto.DeliveryMethod,Address);
+            var Order = await _orderService.CreateOrderAsync(BuyerEmail, orderDto.BaskektId, orderDto.DeliveryMethod, Address);
             if (Order is null) return BadRequest();
             return Ok(Order);
         }
@@ -37,6 +37,15 @@ namespace TazaFood_Api.Controllers
             var BuyerEmail = User.FindFirstValue(ClaimTypes.Email);
             var Orders = await _orderService.GetOrdersForUsersAsync(BuyerEmail);
             return Ok(Orders);
+        }
+
+        [HttpGet("{Id}")]
+        public async Task<ActionResult<Order>> GetOrdersByIdForUser(int Id)
+        {
+            var BuyerEmail = User.FindFirstValue(ClaimTypes.Email);
+            var Order = await _orderService.GetOrderByIdForUserAsync(Id , BuyerEmail);
+            if (Order is null) return NotFound();
+            return Ok(Order);
         }
     }
 }

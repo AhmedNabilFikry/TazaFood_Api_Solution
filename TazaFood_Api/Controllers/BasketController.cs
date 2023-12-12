@@ -8,7 +8,7 @@ using TazaFood.Core.Models;
 
 namespace TazaFood_Api.Controllers
 {
-    [Authorize]
+  
     public class BasketController : BaseApiController
     {
         private readonly IBasketRepository _basketRepo;
@@ -17,7 +17,7 @@ namespace TazaFood_Api.Controllers
         {
             _basketRepo = basket;
         }
-        
+
         [HttpGet("GetBasket")]
         public async Task<ActionResult<UserBasket>> GetBasket(string ID)
         {
@@ -33,7 +33,7 @@ namespace TazaFood_Api.Controllers
         public async Task<ActionResult<UserBasket>> Updatebasket(UserBasket basket)
         {
             var CreatedOrUpdatedBasket = await _basketRepo.UpdateBasketAsync(basket);
-            if (CreatedOrUpdatedBasket is null) return BadRequest("there is error occuerd when add or update cart");
+            if (CreatedOrUpdatedBasket is null) return BadRequest("there is error occurred when add or update cart");
             return CreatedOrUpdatedBasket;
         }
         [HttpDelete]

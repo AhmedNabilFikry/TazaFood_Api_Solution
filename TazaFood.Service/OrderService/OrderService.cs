@@ -15,15 +15,17 @@ namespace TazaFood.Service.OrderService
     {
         private readonly IBasketRepository _basketRepository;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IPaymentService _paymentService;
 
         //private readonly IGenericRepository<Product> _productRepo;
         //private readonly IGenericRepository<DeliveryMethod> _deliveryMethodRepo;
         //private readonly IGenericRepository<Order> _orderRepo;
 
-        public OrderService(IBasketRepository basketRepository, IUnitOfWork unitOfWork )
+        public OrderService(IBasketRepository basketRepository, IUnitOfWork unitOfWork, IPaymentService paymentService )
         {
             _basketRepository = basketRepository;
             _unitOfWork = unitOfWork;
+            _paymentService = paymentService;
 
             //_productRepo = ProductRepo;
             //_deliveryMethodRepo = DeliveryMethodRepo;
@@ -56,7 +58,14 @@ namespace TazaFood.Service.OrderService
             var deliveryMethod = await _unitOfWork.Repository<DeliveryMethod>().GetByIDAsync(DeliveryMethod);
 
             // 5. Create Order
-            var order = new Order(BuyerEmail , ShippingAddress , deliveryMethod , orderItems , subTotal);
+            var Spec = new OrderWithPaymentIntentIdSpecifications(basket.PaymentIntentId);
+            var existingOrder = await _unitOfWork.Repository<Order>().GetByIDWithSpecAsync(Spec);
+            if (existingOrder is not null)
+            {
+                _unitOfWork.Repository<Order>().Delete(existingOrder);
+                await _paymentService.CreateOrUpdatePaymentIntent(basket.PaymentIntentId);
+            }
+            var order = new Order(BuyerEmail , ShippingAddress , deliveryMethod , orderItems , subTotal, basket.PaymentIntentId);
             await _unitOfWork.Repository<Order>().Add(order);
 
             // 6. Save Changes By IUnit Of Work 

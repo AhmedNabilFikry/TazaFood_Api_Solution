@@ -10,9 +10,9 @@ namespace TazaFood.Core.IRepository
 {
     public interface IGenericRepository<T> where T :BaseModel
     {
-        //GetAll Products Method 
+        //GetAll Products  
         Task<IReadOnlyList<T>> GetAllASync();
-        // GetByID Method 
+        // GetByID  
         Task<T> GetByIDAsync(int ID);
         Task<IReadOnlyList<T>> GetAllWithSpecASync(ISpecification<T> spec);
         Task<T> GetByIDWithSpecAsync(ISpecification<T> spec);

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using TazaFood.Core.IRepository;
 using TazaFood.Core.Models;
 using TazaFood.Core.Models.Order_Aggregate;
+using TazaFood.Core.Specification.Order_Specifications;
 using Product = TazaFood.Core.Models.Product;
 
 namespace TazaFood.Service.PaymentService
@@ -84,6 +85,23 @@ namespace TazaFood.Service.PaymentService
             // To track changes that apply to the basket
             await _basketRepository.UpdateBasketAsync(Basket);
             return Basket;
+        }
+
+        public async Task<Order> UpdatePaymentIntentStatus(string PaymentIntentId, bool IsSucceeded)
+        {
+            var Spec = new OrderWithPaymentIntentIdSpecifications(PaymentIntentId);
+            var Order = await _unitOfWork.Repository<Order>().GetByIDWithSpecAsync(Spec);
+            if (IsSucceeded)
+            {
+                Order.Status = OrderStatus.PaymentReceived;
+            }
+            else 
+            {
+                Order.Status = OrderStatus.PaymentFailed;
+            }
+            _unitOfWork.Repository<Order>().Update(Order);
+            await _unitOfWork.Complete();
+            return Order;
         }
     }
 }

@@ -102,6 +102,8 @@ namespace TazaFood_Api
 
             app.UseStaticFiles();
 
+            app.UseCors("MyPolicy");
+
             app.UseAuthentication();
 
             app.UseAuthorization();

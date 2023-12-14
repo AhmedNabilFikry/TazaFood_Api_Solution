@@ -32,8 +32,17 @@ namespace TazaFood_Api.Extensions
             // Allow Di For orderService
             services.AddScoped(typeof(IOrderService), typeof(OrderService));
 
-            // Allow Di For PaymetService
+            // Allow Di For PaymentService
             services.AddScoped<IPaymentService , PaymentService>();
+
+            // Allow Di For CorsPolicy
+            services.AddCors(options =>
+            {
+                options.AddPolicy("MyPolicy", CorsOptions =>
+                {
+                    CorsOptions.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
+                });
+            });
 
             return services;
         }

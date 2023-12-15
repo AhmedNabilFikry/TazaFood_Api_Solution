@@ -11,11 +11,14 @@ namespace TazaFood.Service.CacheService
 {
     public class ResponseCacheService : IResponseCachingService
     {
+
         private readonly IDatabase _database;
+
         public ResponseCacheService(IConnectionMultiplexer redis)
         {
             _database = redis.GetDatabase();
         }
+
         public async Task CachingResponseAsync(string cacheKey, object response, TimeSpan timeToLive)
         {
             if (response == null) return;

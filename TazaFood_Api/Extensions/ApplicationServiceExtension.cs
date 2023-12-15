@@ -1,6 +1,7 @@
 ﻿using TazaFood.Core.IRepository;
 using TazaFood.Core.Services;
 using TazaFood.Repository.Repositories;
+using TazaFood.Service.CacheService;
 using TazaFood.Service.OrderService;
 using TazaFood.Service.PaymentService;
 using TazaFood_Api.Helpers;
@@ -43,6 +44,9 @@ namespace TazaFood_Api.Extensions
                     CorsOptions.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
                 });
             });
+
+            //Allow Di For IResponseCachingService
+            services.AddSingleton<IResponseCachingService, ResponseCacheService>();
 
             return services;
         }

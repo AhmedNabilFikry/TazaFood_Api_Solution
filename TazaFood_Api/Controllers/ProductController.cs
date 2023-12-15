@@ -61,6 +61,7 @@ namespace TazaFood_Api.Controllers
             return Ok(_mapper.Map<IEnumerable<Product>, IEnumerable<ProductToReturnDTO>>(Products));
         }
 
+        [CachedAttribute(100)]
         //GetPagedProducts "Add Standard Response for GetAll EndPoint"
         [HttpGet("ProductsPagination")]
         public async Task<ActionResult<IReadOnlyList<ProductToReturnDTO>>> GetProductByPagination([FromQuery]ProductSpecParams SpecParams)

@@ -45,7 +45,7 @@ namespace TazaFood_Api.Helpers
         {
             var keyBuilder = new StringBuilder();
             keyBuilder.Append(request.Path);
-            foreach (var (Key, Value) in request.Query)
+            foreach (var (Key, Value) in request.Query.OrderBy(X => X.Key))
             {
                 keyBuilder.Append($"{Key}-{Value}");
             }

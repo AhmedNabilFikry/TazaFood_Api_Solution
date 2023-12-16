@@ -1,6 +1,7 @@
 ﻿using TazaFood.Core.IRepository;
 using TazaFood.Core.Services;
 using TazaFood.Repository.Repositories;
+using TazaFood.Service;
 using TazaFood.Service.CacheService;
 using TazaFood.Service.OrderService;
 using TazaFood.Service.PaymentService;
@@ -12,6 +13,7 @@ namespace TazaFood_Api.Extensions
     {
         public static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
+
             // Allow Di For GenericRepository 
             //builder.Services.AddScoped<IGenericRepository<Product>,GenericRepository<Product>>(); Per Model
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -48,6 +50,8 @@ namespace TazaFood_Api.Extensions
             //Allow Di For IResponseCachingService
             services.AddSingleton<IResponseCachingService, ResponseCacheService>();
 
+            //Allow Di For IFileService
+            services.AddScoped<IFileService ,FileService>();
             return services;
         }
     }

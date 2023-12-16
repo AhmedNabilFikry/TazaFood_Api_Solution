@@ -90,7 +90,7 @@ namespace TazaFood.Service.PaymentService
         public async Task<Order> UpdatePaymentIntentStatus(string PaymentIntentId, bool IsSucceeded)
         {
             var Spec = new OrderWithPaymentIntentIdSpecifications(PaymentIntentId);
-            var Order = await _unitOfWork.Repository<Order>().GetByIDWithSpecAsync(Spec);
+            var Order = await _unitOfWork.Repository<Order>().GetEntityWithSpecAsync(Spec);
             if (IsSucceeded)
             {
                 Order.Status = OrderStatus.PaymentReceived;

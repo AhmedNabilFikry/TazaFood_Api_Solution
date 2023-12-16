@@ -38,7 +38,7 @@ namespace TazaFood.Repository.Repositories
             return await ApplySpecification(spec).ToListAsync();
         }
 
-        public async Task<T> GetByIDWithSpecAsync(ISpecification<T> spec)
+        public async Task<T> GetEntityWithSpecAsync(ISpecification<T> spec)
         {
             return await ApplySpecification(spec).FirstOrDefaultAsync();
         }

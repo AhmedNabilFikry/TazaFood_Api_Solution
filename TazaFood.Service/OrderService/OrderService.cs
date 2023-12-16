@@ -59,7 +59,7 @@ namespace TazaFood.Service.OrderService
 
             // 5. Create Order
             var Spec = new OrderWithPaymentIntentIdSpecifications(basket.PaymentIntentId);
-            var existingOrder = await _unitOfWork.Repository<Order>().GetByIDWithSpecAsync(Spec);
+            var existingOrder = await _unitOfWork.Repository<Order>().GetEntityWithSpecAsync(Spec);
             if (existingOrder is not null)
             {
                 _unitOfWork.Repository<Order>().Delete(existingOrder);
@@ -77,7 +77,7 @@ namespace TazaFood.Service.OrderService
         public async Task<Order> GetOrderByIdForUserAsync(int OrderId, string BuyerEmail)
         {
             var Spec = new OrderSpecifications(OrderId, BuyerEmail);
-            var Order = await _unitOfWork.Repository<Order>().GetByIDWithSpecAsync(Spec);
+            var Order = await _unitOfWork.Repository<Order>().GetEntityWithSpecAsync(Spec);
             return Order;
         }
 
